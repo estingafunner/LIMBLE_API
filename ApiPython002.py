@@ -1,4 +1,4 @@
-#Write your code here :-)
+
 #import requests
 import http.client
 import json
@@ -17,7 +17,7 @@ headers = {
     'Authorization' : 'Basic %s' %  userAndPass,
     'assetID': ''
 }
-conn.request("GET", "/v2/assets/?limit=10&orderBy=-lastEdited", payload, headers)
+conn.request("GET", "/v2/tasks/?name=UPDATED%20TASK&limit=5&status=0", payload, headers)
 
 res = conn.getresponse()
 data = res.read()
