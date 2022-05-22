@@ -17,12 +17,18 @@ headers = {
     'Authorization' : 'Basic %s' %  userAndPass,
     'assetID': ''
 }
-conn.request("GET", "/v2/tasks/?name=UPDATED%20TASK&limit=5&status=0", payload, headers)
+conn.request("GET", "/v2/tasks/?limit=6&status=0", payload, headers)
 
 res = conn.getresponse()
 data = res.read()
 
 json_output = json.loads(data)
 
+#Prints in json format
 pprint(json_output)
+
+#data.decode("utf-8"
+with open("APIpy.json", "w") as write_file:
+    json.dump((json_output), write_file)
+
 #print(data.decode("utf-8"))  ###-THIS IS RAW OUTPUT
