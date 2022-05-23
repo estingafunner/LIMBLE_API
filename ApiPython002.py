@@ -25,10 +25,13 @@ data = res.read()
 json_output = json.loads(data)
 
 #Prints in json format
-pprint(json_output)
+#pprint(json_output)
 
-#data.decode("utf-8"
+#data.decode("utf-8")
 with open("APIpy.json", "w") as write_file:
     json.dump((json_output), write_file)
+
+#json_str = json.dumps(json_output)
+#print(json_str)
 
 #print(data.decode("utf-8"))  ###-THIS IS RAW OUTPUT
