@@ -1,13 +1,15 @@
 import json
 
-f = open('APIpy.json', 'r')
+f = open('APIpy.json', )
 
-data = json.load(f)
-
-
-#for i in data:
+data = json.loads(f)
 
 
-print(data[1]['taskID'])
+""" for i in data[1]:
+    print(i)
 
-f.close()
+f.close() """
+
+for key in data:
+
+    print(key, ":", data[key])

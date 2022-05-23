@@ -17,12 +17,31 @@ headers = {
     'Authorization' : 'Basic %s' %  userAndPass,
     'assetID': ''
 }
-conn.request("GET", "/v2/tasks/?limit=6&status=0", payload, headers)
+conn.request("GET", "/v2/tasks/?limit=4&status=0", payload, headers)
 
 res = conn.getresponse()
 data = res.read()
 
 json_output = json.loads(data)
+
+
+FCA = [] #taskID, assetID, due
+
+
+""" with open('APIpy.json') as f:
+    data = json.loads(f.read())
+    #print(data[0]['taskID'])
+ """
+for i in json_output:
+    print(i['taskID'])
+    print(i['assetID'])
+    print(" - ")
+
+    FCA += [i['taskID']]
+    FCA += [i['assetID']]
+#f.close()
+
+print(FCA)
 
 #Prints in json format
 #pprint(json_output)
