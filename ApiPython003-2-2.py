@@ -6,9 +6,9 @@ from base64 import b64encode
 from json import dumps, loads
 from pprint import pprint 
 
-def calc_filterCode(risk, sev, pdc):
+""" def calc_filterCode(risk, sev, pdc):
 
-    return bigFC
+    return bigFC """
 
 def calc_pdc(dueUni):
     pdc = 5

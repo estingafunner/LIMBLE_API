@@ -6,36 +6,70 @@ from http.client import HTTPSConnection
 from base64 import b64encode
 from json import dumps, loads
 from pprint import pprint
+import numpy as np
 
 
-def update_FC(notSurYet):
+def FCA2Priorites(taskArr, fcArr):
+    fLength = 0
+    prioArr = []
+    taskArri = np.array(taskArr)
+    fcArri = np.array(fcArr)
+
+    print(fcArri)
+
+#MAKE two mulitdimensional array m1[], m2[]
+###FIRST lists are ordered: taskArri, fcArri, prioArr(emptyToStart) - unaltered, to be referenced later     
+###SECOND lists are ordered: taskArri, fcArri. Which are then sorted np.sort(m2 by second list)
+
+##### FROM @@@HERE@@@
+    if (0 in fcArri) == True:
+        #new array (prioArr) will generate such that fcArri(0) = 1
+        #Divide remaining in fcArri into 4 sections, assign 2-5 for each section into prioArr
+        for k, j in enumerate(fcArri):
+            if j == 0:
+                prioArr += [1]
+                #print(prioArr)
+            else:
+                print(k) # - J - Needs to be the index/position of J in the array
+                print(len(fcArri))
+                print("1 Non-Zero")
+                if fLength == 0:
+                    fLength = (len(fcArri)) - k
+                    print(fLength)
+                    fLength = fLength // 4
+                    print(fLength)
+                    #fcArri len - j / 4 or something idk
+                else:
+                    print("nothing yet")
+
+            #END IF
+        #END FOR-j
+    else:
+        #np.sort(fcArri) (ascending by default)
+        #divide fcArri into FIVE equal parts/sections
+        #populate prioArr
+        print('nothing here yet.')
+
+###### TO @@@HERE@@@ MIGHT BE USELESS, need to figure out 
+# how to bring the 'sorted' list back to original order 
+# after the prioArr/PriorityNumbers have been calculated
+    return prioArr
+
+def update_FC( ): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
     coolshit = 0
+    PRIid = 1
+
     conn = http.client.HTTPSConnection("")
+    
     payload = json.dumps({
-        "name": "Do this task please!",
-        "locationID": 163,
-        "assetID": 1,
-        "due": 1564605614,
-        "type": 6,
-        "assignment": 341,
-        "assignmentType": "user",
-        "priority": 3,
-        "description": "this is a test task",
-        "requestName": "requtest name",
-        "requestEmail": "requestemail@domain.com",
-        "requestPhone": "1111111111",
-        "requestDescription": "request description",
-        "status": 1,
-        "meta1": "meta1",
-        "meta2": "meta2",
-        "meta3": "meta3"
+        "priority": PRIid,
     })
     headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Basic e3thcGlVTn19Ont7YXBpUGFzc319'
     }
-    conn.request("PATCH", "//api.limblecmms.com:443/v2/tasks/",
-                 payload, headers)
+    ###TaskID will go HERE!
+    conn.request("PATCH", "//api.limblecmms.com:443/v2/tasks/"+ str(taskID), payload, headers)
     res = conn.getresponse()
     data = res.read()
     print(data.decode("utf-8"))
@@ -149,25 +183,34 @@ def calc_pdc(dueUni):
 
     return pdc
 
+
 def buildArrayofTasks(limited):
     conn = http.client.HTTPSConnection("api.limblecmms.com", 443)
     payload = ""
-    userAndPass = b64encode(b"DCHBKYZF5NMXHCV8AG4M1J53DFDONO8Z:WV0KBNNCRLP0SO3CYZMOGFQATYTPG2Y").decode("ascii")
+    userAndPass = b64encode(
+        b"DCHBKYZF5NMXHCV8AG4M1J53DFDONO8Z:WV0KBNNCRLP0SO3CYZMOGFQATYTPG2Y").decode("ascii")
 
     headers = {
-        'Authorization' : 'Basic %s' %  userAndPass,
+        'Authorization': 'Basic %s' % userAndPass,
         'assetID': ''
     }
-    conn.request("GET", "/v2/tasks/?limit=" + str(limited) + "&status=0", payload, headers)
+    conn.request("GET", "/v2/tasks/?limit=" +
+                 str(limited) + "&status=0", payload, headers)
 
     res = conn.getresponse()
     data = res.read()
 
     json_output = json.loads(data)
 
-
-    FCA = [] #"taskID","assetID","severity","risk","pdc","FC"
-    keyGuide = "taskID,assetID,severity,risk,pdc,FilterCode"
+    FCA = []  # "taskID","assetID","severity","risk","pdc","FC"
+    taskArr = []
+    assetArr = []
+    sevArr = []
+    riskArr = []
+    pdcArr = []
+    fcArr = []
+    prioArr = []
+    keyGuide = "taskID,assetID,severity,risk,pdc,FilterCode,Priority"
 
     """ with open('APIpy.json') as f:
         data = json.loads(f.read())
@@ -175,9 +218,9 @@ def buildArrayofTasks(limited):
     """
     for i in json_output:
         #print(i['taskID'])
-            #with taskID
+        #with taskID
         #print(i['assetID'])
-            #with assetID
+        #with assetID
         #print(" - ")
         #FCA += [i] # & "-"
 
@@ -186,17 +229,26 @@ def buildArrayofTasks(limited):
         thisPDC = calc_pdc(i['due'])
         thisFC = calc_filterCode(thisRisk, thisSev, thisPDC)
 
-        FCA += [i['taskID']]
-        FCA += [i['assetID']]
-        FCA += [thisSev]
-        FCA += [thisRisk]
-        FCA += [thisPDC]
-        FCA += [thisFC]
+        taskArr += [i['taskID']]
+        assetArr += [i['assetID']]
+        sevArr += [thisSev]
+        riskArr += [thisRisk]
+        pdcArr += [thisPDC]
+        fcArr += [thisFC]
         #FCA += [("-")]
-    #f.close()
-    print(keyGuide)
-    print(FCA)
+        #f.close()
+    #END FOR-i LOOP
+
+    
+
+    
+
+    #print(taskArr)
+    ##print(keyGuide)
+    #print(fcArr)
+    FCA2Priorites(taskArr, fcArr)
+    #return(print("done"))
 
 
-buildArrayofTasks(522)
 
+buildArrayofTasks(60)
