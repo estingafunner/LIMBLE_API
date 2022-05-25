@@ -8,15 +8,14 @@ from json import dumps, loads
 from pprint import pprint
 import numpy as np
 
-
 def FCA2Priorites(taskArr, fcArr):
     fLength = 0
     prioArr = []
     nzFcArr = []
+    finPrioArr = []
     nzFcArri = np.array(nzFcArr)
     taskArri = np.array(taskArr)
     fcArri = np.array(fcArr)
-
 
     #print(fcArri)
 
@@ -26,18 +25,51 @@ def FCA2Priorites(taskArr, fcArr):
             #END IF--1
         #END for-m-n
 
-    nzFcArri = np.sort(nzFcArr)
+    nzFcArri = np.sort(nzFcArr) #every task's Filter Code, in ascending order
     nzL = len(nzFcArri)
-    print(nzL)
+    #print(nzL)
 
-    if len(fcArri) == nzL: # START IF--2  #No Zeros; 5 Priority Levels
-        print("No Zeros")
-
-    else: # ZEROs are present in fcArri; 4 Priority Levels (+ Zero = Level 5)
-        print("Zeros Exist")
-        nzChops = nzL // 4
-        print(nzChops)
+    if len(fcArri) == nzL:  # START IF--2  #No Zeros; 5 Priority Levels
+        #print("No Zeros")
+        nzChops = nzL // 5
+        #print(nzChops)
         b = 0
+        # builds an array of equal length to nzFcArri(the non-zero filter codes), assigning priority numbers to the filtercodes
+        while b < nzL:
+            if b < nzChops:
+                prioArr.append(5)
+            elif nzChops <= b < (nzChops * 2):
+                prioArr.append(4)
+            elif (nzChops * 2) <= b < (nzChops * 3):
+                prioArr.append(3)
+            elif (nzChops * 3) <= b < (nzChops * 4):
+                prioArr.append(2)
+            else:
+                prioArr.append(1)
+            #END while-b 1
+
+        prioArri = np.array(prioArr)
+
+        #for through fcArr, if fcArr(w) = 0 then finPrioArr.append(5)
+        for unorderedFc in fcArr:  # START for-unorderedFc
+            w = 0
+            while w != -9:  # START Priority Seeker 1
+                prSeek = nzFcArri[w]
+                prMatch = prioArr[w]
+                if prSeek == unorderedFc:  # START if/else-prSeek
+                    finPrioArr.append(prMatch)
+                    w = -9
+                else:
+                    w += 1
+                    #END if/else-prSeek
+                #END Priority Seeker 1
+
+    else:  # ZEROs are present in fcArri; 4 Priority Levels (+ Zero = Level 5)
+        #print("Zeros Exist")
+        nzChops = nzL // 4
+        #print(nzChops)
+        b = 0
+        # builds an array of equal length to nzFcArri(the non-zero filter codes), assigning priority numbers to the filtercodes
         while b < nzL:
             if b < nzChops:
                 prioArr.append(4)
@@ -47,55 +79,76 @@ def FCA2Priorites(taskArr, fcArr):
                 prioArr.append(2)
             else:
                 prioArr.append(1)
-            
+
                 #END IF--b<nzChops
             b += 1
-            #END while-b
+            #END while-b 2
         prioArri = np.array(prioArr)
-        fourKey = np.stack((nzFcArri, prioArri), axis=0)
-        print(fourKey)
+
+        #for through fcArr, if fcArr(w) = 0 then finPrioArr.append(5)
+        for unorderedFc in fcArr:  # START for-unorderedFc
+            if unorderedFc == 0:  # START if-zero check2
+                finPrioArr.append(5)
+            else:  # START else-zero check 2
+                w = 0
+                while w != -9:  # START Priority Seeker 2
+                    prSeek = nzFcArri[w]
+                    prMatch = prioArr[w]
+                    if prSeek == unorderedFc:  # START if/else-prSeek
+                        finPrioArr.append(prMatch)
+                        w = -9
+                    else:
+                        w += 1
+                        #END if/else-prSeek
+                    #END Priority Seeker 2
+                #END else-zero check 2
+                #END if-zero check 2
+            #END for-unorderedFc
+
+        #else, forloop nzFcArri looking to match value of fcArr(w)
+        #if matched, get the position of nzFcArri, apply same position to prioArri, finPrioArr.append(prioArr(whatev position))
+
         #END IF--2
 
 
-    print(fcArri)
+    """     print(fcArri)
     print(nzFcArri)
     print(prioArr)
-    return nzFcArri
+    print(fcArri)
+    print(finPrioArr) """
 
-def update_FC( ): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
+    fourKey = np.stack((fcArr, finPrioArr, taskArr), axis=1)  # DONT NEED?
+    #print(fourKey)
+
+    update_FC(taskArr, finPrioArr)
+
+    return(print(fourKey))
+
+def update_FC(taskArr, finPrioArr): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
     coolshit = 0
-    PRIid = 1
+    PRIid = 5
+    taskID = 59
+
 
     conn = http.client.HTTPSConnection("")
-    
     payload = json.dumps({
-        "priority": PRIid,
+        "priority": PRIid
     })
+    userAndPass = b64encode(
+        b"DCHBKYZF5NMXHCV8AG4M1J53DFDONO8Z:WV0KBNNCRLP0SO3CYZMOGFQATYTPG2Y").decode("ascii")
+
     headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic e3thcGlVTn19Ont7YXBpUGFzc319'
+        'Authorization': 'Basic %s' % userAndPass,
+        'assetID': ''
     }
+    
     ###TaskID will go HERE!
     conn.request("PATCH", "//api.limblecmms.com:443/v2/tasks/"+ str(taskID), payload, headers)
     res = conn.getresponse()
     data = res.read()
     print(data.decode("utf-8"))
 
-    """      conn = http.client.HTTPSConnection("api.limblecmms.com", 443)
-    payload = ""
-    userAndPass = b64encode(b"DCHBKYZF5NMXHCV8AG4M1J53DFDONO8Z:WV0KBNNCRLP0SO3CYZMOGFQATYTPG2Y").decode("ascii")
 
-    headers = {
-        'Authorization' : 'Basic %s' %  userAndPass,
-        'assetID': ''
-    }
-    conn.request("GET", "/v2/tasks/?limit=" + str(limited) + "&status=0", payload, headers)
-
-    res = conn.getresponse()
-    data = res.read()
-
-    json_output = json.loads(data)
-        """
     return int(coolshit)
 
 def calc_filterCode(risk, sev, pdc):
@@ -190,7 +243,6 @@ def calc_pdc(dueUni):
 
     return pdc
 
-
 def buildArrayofTasks(limited):
     conn = http.client.HTTPSConnection("api.limblecmms.com", 443)
     payload = ""
@@ -246,19 +298,18 @@ def buildArrayofTasks(limited):
         #f.close()
     #END FOR-i LOOP
 
-    
-
-    
 
     #print(taskArr)
     ##print(keyGuide)
     #print(fcArr)
+
     FCA2Priorites(taskArr, fcArr)
-    #return(print("done"))
+
+    return(print("done"))
 
 
 
-buildArrayofTasks(60)
+buildArrayofTasks(600)
 
 """ #MAKE two mulitdimensional array m1[], m2[]
 ###FIRST lists are ordered: taskArri, fcArri, prioArr(emptyToStart) - unaltered, to be referenced later     
@@ -297,4 +348,8 @@ buildArrayofTasks(60)
 ###### TO @@@HERE@@@ MIGHT BE USELESS, need to figure out 
 # how to bring the 'sorted' list back to original order 
 # after the prioArr/PriorityNumbers have been calculated
+
+
+        fourKey = np.stack((nzFcArri, prioArri), axis=0) #### DONT NEED?
+        print(fourKey)
  """
