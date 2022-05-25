@@ -12,48 +12,55 @@ import numpy as np
 def FCA2Priorites(taskArr, fcArr):
     fLength = 0
     prioArr = []
+    nzFcArr = []
+    nzFcArri = np.array(nzFcArr)
     taskArri = np.array(taskArr)
     fcArri = np.array(fcArr)
 
-    print(fcArri)
 
-#MAKE two mulitdimensional array m1[], m2[]
-###FIRST lists are ordered: taskArri, fcArri, prioArr(emptyToStart) - unaltered, to be referenced later     
-###SECOND lists are ordered: taskArri, fcArri. Which are then sorted np.sort(m2 by second list)
+    #print(fcArri)
 
-##### FROM @@@HERE@@@
-    if (0 in fcArri) == True:
-        #new array (prioArr) will generate such that fcArri(0) = 1
-        #Divide remaining in fcArri into 4 sections, assign 2-5 for each section into prioArr
-        for k, j in enumerate(fcArri):
-            if j == 0:
-                prioArr += [1]
-                #print(prioArr)
+    for n in fcArri:
+        if n != 0:  # START IF--1
+            nzFcArr.append(n)
+            #END IF--1
+        #END for-m-n
+
+    nzFcArri = np.sort(nzFcArr)
+    nzL = len(nzFcArri)
+    print(nzL)
+
+    if len(fcArri) == nzL: # START IF--2  #No Zeros; 5 Priority Levels
+        print("No Zeros")
+
+    else: # ZEROs are present in fcArri; 4 Priority Levels (+ Zero = Level 5)
+        print("Zeros Exist")
+        nzChops = nzL // 4
+        print(nzChops)
+        b = 0
+        while b < nzL:
+            if b < nzChops:
+                prioArr.append(4)
+            elif nzChops <= b < (nzChops * 2):
+                prioArr.append(3)
+            elif (nzChops * 2) <= b < (nzChops * 3):
+                prioArr.append(2)
             else:
-                print(k) # - J - Needs to be the index/position of J in the array
-                print(len(fcArri))
-                print("1 Non-Zero")
-                if fLength == 0:
-                    fLength = (len(fcArri)) - k
-                    print(fLength)
-                    fLength = fLength // 4
-                    print(fLength)
-                    #fcArri len - j / 4 or something idk
-                else:
-                    print("nothing yet")
+                prioArr.append(1)
+            
+                #END IF--b<nzChops
+            b += 1
+            #END while-b
+        prioArri = np.array(prioArr)
+        fourKey = np.stack((nzFcArri, prioArri), axis=0)
+        print(fourKey)
+        #END IF--2
 
-            #END IF
-        #END FOR-j
-    else:
-        #np.sort(fcArri) (ascending by default)
-        #divide fcArri into FIVE equal parts/sections
-        #populate prioArr
-        print('nothing here yet.')
 
-###### TO @@@HERE@@@ MIGHT BE USELESS, need to figure out 
-# how to bring the 'sorted' list back to original order 
-# after the prioArr/PriorityNumbers have been calculated
-    return prioArr
+    print(fcArri)
+    print(nzFcArri)
+    print(prioArr)
+    return nzFcArri
 
 def update_FC( ): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
     coolshit = 0
@@ -252,3 +259,42 @@ def buildArrayofTasks(limited):
 
 
 buildArrayofTasks(60)
+
+""" #MAKE two mulitdimensional array m1[], m2[]
+###FIRST lists are ordered: taskArri, fcArri, prioArr(emptyToStart) - unaltered, to be referenced later     
+###SECOND lists are ordered: taskArri, fcArri. Which are then sorted np.sort(m2 by second list)
+
+##### FROM @@@HERE@@@
+    if (0 in fcArri) == True:
+        #new array (prioArr) will generate such that fcArri(0) = 1
+        #Divide remaining in fcArri into 4 sections, assign 2-5 for each section into prioArr
+        
+        for k, j in enumerate(fcArri):
+            if j == 0:
+                prioArr += [1]
+                #print(prioArr)
+            else:
+                print(k) # - J - Needs to be the index/position of J in the array
+                print(len(fcArri))
+                print("1 Non-Zero")
+                if fLength == 0:
+                    fLength = (len(fcArri)) - k
+                    print(fLength)
+                    fLength = fLength // 4
+                    print(fLength)
+                    #fcArri len - j / 4 or something idk
+                else:
+                    print("nothing yet")
+
+            #END IF
+        #END FOR-j
+    else:
+        #np.sort(fcArri) (ascending by default)
+        #divide fcArri into FIVE equal parts/sections
+        #populate prioArr
+        print('nothing here yet.')
+
+###### TO @@@HERE@@@ MIGHT BE USELESS, need to figure out 
+# how to bring the 'sorted' list back to original order 
+# after the prioArr/PriorityNumbers have been calculated
+ """

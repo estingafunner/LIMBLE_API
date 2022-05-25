@@ -1,14 +1,27 @@
+###This has become a testing ground
+
 import time
 import http.client
 import json
 from http.client import HTTPSConnection
 from base64 import b64encode
 from json import dumps, loads
-from pprint import pprint 
+from pprint import pprint
+import numpy as np
 
-""" def calc_filterCode(risk, sev, pdc):
 
-    return bigFC """
+
+def mdim():
+    oneside = 0
+    x = np.array([[1, 2], [6, 4], [7, 6], [7, 8], [23, 10], [11, 12]], np.int32)
+    print(x)
+    y = np.sort(x)
+    print(y)
+
+
+    return oneside
+
+mdim()
 
 def calc_pdc(dueUni):
     pdc = 5
