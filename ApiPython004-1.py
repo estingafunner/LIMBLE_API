@@ -36,15 +36,15 @@ def FCA2Priorites(taskArr, fcArr):
         # builds an array of equal length to nzFcArri(the non-zero filter codes), assigning priority numbers to the filtercodes
         while b < nzL:
             if b < nzChops:
-                prioArr.append(5)
+                prioArr.append(1)
             elif nzChops <= b < (nzChops * 2):
-                prioArr.append(4)
+                prioArr.append(2)
             elif (nzChops * 2) <= b < (nzChops * 3):
                 prioArr.append(3)
             elif (nzChops * 3) <= b < (nzChops * 4):
-                prioArr.append(2)
+                prioArr.append(4)
             else:
-                prioArr.append(1)
+                prioArr.append(5)
             #END while-b 1
 
         #prioArri = np.array(prioArr)
@@ -71,13 +71,13 @@ def FCA2Priorites(taskArr, fcArr):
         # builds an array of equal length to nzFcArri(the non-zero filter codes), assigning priority numbers to the filtercodes
         while b < nzL:
             if b < nzChops:
-                prioArr.append(4)
+                prioArr.append(2)
             elif nzChops <= b < (nzChops * 2):
                 prioArr.append(3)
             elif (nzChops * 2) <= b < (nzChops * 3):
-                prioArr.append(2)
+                prioArr.append(4)
             else:
-                prioArr.append(1)
+                prioArr.append(5)
 
                 #END IF--b<nzChops
             b += 1
@@ -87,7 +87,7 @@ def FCA2Priorites(taskArr, fcArr):
         #for through fcArr, if fcArr(w) = 0 then finPrioArr.append(5)
         for unorderedFc in fcArr:  # START for-unorderedFc
             if unorderedFc == 0:  # START if-zero check2
-                finPrioArr.append(5)
+                finPrioArr.append(1)
             else:  # START else-zero check 2
                 w = 0
                 while w != -9:  # START Priority Seeker 2  ###### -9 is arbitrary, wanted to use a while loop for no particular reason, don't judge.
