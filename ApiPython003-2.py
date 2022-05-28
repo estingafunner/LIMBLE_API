@@ -125,12 +125,12 @@ def FCA2Priorites(taskArr, fcArr):
     return(print(fourKey))
 
 def update_FC(taskArr, finPrioArr): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
-    coolshit = 0
+    print("Hello")
     PRIid = 1
     taskID = 59
 
 
-    conn = http.client.HTTPSConnection("")
+    conn = http.client.HTTPSConnection("api.limblecmms.com", 443)
     payload = json.dumps({
         "priority": PRIid
     })
@@ -139,18 +139,18 @@ def update_FC(taskArr, finPrioArr): #THIS SHOULD BE THE LAST STEP - sending the 
 
     headers = {
         'Authorization': 'Basic %s' % userAndPass,
-        'assetID': '',
-        'Content-Type': json
+        'Content-Type': 'application/json'
     }
     
     ###TaskID will go HERE!
-    conn.request("PATCH", "//api.limblecmms.com:443/v2/tasks/"+ str(taskID), str(payload), headers)
+    conn.request("PATCH", "/v2/tasks/"+ str(taskID), payload, headers)
     res = conn.getresponse()
     data = res.read()
     print(data.decode("utf-8"))
 
+    print("THIS IS THE END OF THIS THING")
 
-    return int(coolshit)
+    return(print("GOODBYE"))
 
 def calc_filterCode(risk, sev, pdc):
     bigFC = int(risk) * int(sev) * int(pdc)
@@ -252,7 +252,6 @@ def buildArrayofTasks(limited):
 
     headers = {
         'Authorization': 'Basic %s' % userAndPass,
-        'assetID': ''
     }
     conn.request("GET", "/v2/tasks/?limit=" +
                  str(limited) + "&status=0", payload, headers)

@@ -5,16 +5,17 @@ from http.client import HTTPSConnection
 from base64 import b64encode
 from json import dumps, loads
 from pprint import pprint
-#import numpy as np
+import numpy as np
 
 
-def update_FC(): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
-    coolshit = 0
-    PRIid = 5
+
+def update_FC(coolshit): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
+    print(coolshit)
+    PRIid = 1
     taskID = 59
 
 
-    conn = http.client.HTTPSConnection("")
+    conn = http.client.HTTPSConnection("api.limblecmms.com", 443)
     payload = json.dumps({
         "priority": PRIid
     })
@@ -23,15 +24,17 @@ def update_FC(): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new
 
     headers = {
         'Authorization': 'Basic %s' % userAndPass,
-        'assetID': '',
-        'Content-Type': json
+        'Content-Type': 'application/json'
     }
     
     ###TaskID will go HERE!
-    conn.request("PATCH", "//api.limblecmms.com:443/v2/tasks/"+ str(taskID), payload, headers)
+    conn.request("PATCH", "/v2/tasks/59", payload, headers)
     res = conn.getresponse()
     data = res.read()
     print(data.decode("utf-8"))
 
+    print("THIS IS THE END OF THIS THING")
 
-    return(print(coolshit))
+    return()
+
+update_FC("THis")
