@@ -21,7 +21,7 @@ def mdim():
 
     return oneside
 
-mdim()
+#mdim()
 
 def calc_pdc(dueUni):
     pdc = 5

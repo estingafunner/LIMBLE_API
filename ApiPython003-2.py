@@ -126,7 +126,7 @@ def FCA2Priorites(taskArr, fcArr):
 
 def update_FC(taskArr, finPrioArr): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
     coolshit = 0
-    PRIid = 5
+    PRIid = 1
     taskID = 59
 
 
@@ -139,11 +139,12 @@ def update_FC(taskArr, finPrioArr): #THIS SHOULD BE THE LAST STEP - sending the 
 
     headers = {
         'Authorization': 'Basic %s' % userAndPass,
-        'assetID': ''
+        'assetID': '',
+        'Content-Type': json
     }
     
     ###TaskID will go HERE!
-    conn.request("PATCH", "//api.limblecmms.com:443/v2/tasks/"+ str(taskID), payload, headers)
+    conn.request("PATCH", "//api.limblecmms.com:443/v2/tasks/"+ str(taskID), str(payload), headers)
     res = conn.getresponse()
     data = res.read()
     print(data.decode("utf-8"))
