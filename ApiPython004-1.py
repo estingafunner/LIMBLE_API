@@ -9,7 +9,11 @@ from pprint import pprint
 import numpy as np
 
 def FCA2Priorites(taskArr, fcArr):
-
+    ratioVariable = 10  #This number determines the distribution of priority levels
+                        #[length of list of tasks] // ratioVariable => 
+                        #IF ratiovariable = 20 AND len(taskList) = 100,
+                        #THEN the 5 priority levels will be divided into...
+                        #rtnartnsxfgnxertnsfxgntxfgns
     prioArr = []
     nzFcArr = []
     finPrioArr = []
@@ -25,6 +29,7 @@ def FCA2Priorites(taskArr, fcArr):
         #END for-m-n
 
     nzFcArri = np.sort(nzFcArr) #every task's Filter Code, in ascending order
+    print(nzFcArri)
 
     nzL = len(nzFcArri) #####THIS WILL NOT continue to work. There will eventually be 
                         #####hundreds of tasks(=> filter codes). Dividing them into 5 equal Priority categories will not be effective
@@ -32,12 +37,12 @@ def FCA2Priorites(taskArr, fcArr):
 
     if len(fcArri) == nzL:  # START IF--2  #No Zeros; 5 Priority Levels
         #print("No Zeros")
-        nzChops = nzL // 5
+        nzChops = nzL // ratioVariable
         #print(nzChops)
         b = 0
         # builds an array of equal length to nzFcArri(the non-zero filter codes), assigning priority numbers to the filtercodes
         while b < nzL:
-            if b < nzChops:
+            if b <= nzChops:
                 prioArr.append(1)
             elif nzChops <= b < (nzChops * 2):
                 prioArr.append(2)
@@ -67,8 +72,8 @@ def FCA2Priorites(taskArr, fcArr):
 
     else:  # ZEROs are present in fcArri; 4 Priority Levels (+ Zero = Level 5)
         #print("Zeros Exist")
-        nzChops = nzL // 4
-        #print(nzChops)
+        nzChops = nzL // ratioVariable
+        print(nzChops)
         b = 0
         # builds an array of equal length to nzFcArri(the non-zero filter codes), assigning priority numbers to the filtercodes
         while b < nzL:
@@ -76,7 +81,7 @@ def FCA2Priorites(taskArr, fcArr):
                 prioArr.append(2)
             elif nzChops <= b < (nzChops * 2):
                 prioArr.append(3)
-            elif (nzChops * 2) <= b < (nzChops * 3):
+            elif (nzChops * 2) <= b < (nzChops * 4):
                 prioArr.append(4)
             else:
                 prioArr.append(5)
