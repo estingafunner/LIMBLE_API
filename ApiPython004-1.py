@@ -25,8 +25,10 @@ def FCA2Priorites(taskArr, fcArr):
         #END for-m-n
 
     nzFcArri = np.sort(nzFcArr) #every task's Filter Code, in ascending order
-    nzL = len(nzFcArri)
-    #print(nzL)
+
+    nzL = len(nzFcArri) #####THIS WILL NOT continue to work. There will eventually be 
+                        #####hundreds of tasks(=> filter codes). Dividing them into 5 equal Priority categories will not be effective
+                        #####nzFcArri is an ascending list of Filter Codes. Take the top 50 or top 10% and divide those into 5 Priorities
 
     if len(fcArri) == nzL:  # START IF--2  #No Zeros; 5 Priority Levels
         #print("No Zeros")
@@ -244,7 +246,7 @@ def calc_pdc(dueUni):
 
     return pdc
 
-def buildArrayofTasks(limited):
+def buildArrayofTasks():
     conn = http.client.HTTPSConnection("api.limblecmms.com", 443)
     payload = ""
     userAndPass = b64encode(
@@ -253,8 +255,7 @@ def buildArrayofTasks(limited):
     headers = {
         'Authorization': 'Basic %s' % userAndPass,
     }
-    conn.request("GET", "/v2/tasks/?limit=" +
-                 str(limited) + "&status=0", payload, headers)
+    conn.request("GET", "/v2/tasks", payload, headers) #the LIMITED (limiting the number of results) will need to be removed eventually. NOW::::: ?limit=" + str(limited) + "&status=0
 
     res = conn.getresponse()
     data = res.read()
@@ -309,7 +310,7 @@ def buildArrayofTasks(limited):
 
 
 
-buildArrayofTasks(600)
+buildArrayofTasks() #LIMITED was removed
 
 """ #MAKE two mulitdimensional array m1[], m2[]
 ###FIRST lists are ordered: taskArri, fcArri, prioArr(emptyToStart) - unaltered, to be referenced later     
