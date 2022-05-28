@@ -91,12 +91,12 @@ def FCA2Priorites(taskArr, fcArr):
                 finPrioArr.append(5)
             else:  # START else-zero check 2
                 w = 0
-                while w != -9:  # START Priority Seeker 2
+                while w != -9:  # START Priority Seeker 2  ###### -9 is arbitrary, wanted to use a while loop for no particular reason, don't judge.
                     prSeek = nzFcArri[w]
                     prMatch = prioArr[w]
                     if prSeek == unorderedFc:  # START if/else-prSeek
                         finPrioArr.append(prMatch)
-                        w = -9
+                        w = -9 #arbitrary
                     else:
                         w += 1
                         #END if/else-prSeek
@@ -125,30 +125,31 @@ def FCA2Priorites(taskArr, fcArr):
     return(print(fourKey))
 
 def update_FC(taskArr, finPrioArr): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
-    print("Hello")
-    PRIid = 1
-    taskID = 59
-
+    #PRIid = 2   #temp trash
+    #taskID = 59 #temp trash
 
     conn = http.client.HTTPSConnection("api.limblecmms.com", 443)
-    payload = json.dumps({
-        "priority": PRIid
-    })
-    userAndPass = b64encode(
-        b"DCHBKYZF5NMXHCV8AG4M1J53DFDONO8Z:WV0KBNNCRLP0SO3CYZMOGFQATYTPG2Y").decode("ascii")
-
+    userAndPass = b64encode(b"DCHBKYZF5NMXHCV8AG4M1J53DFDONO8Z:WV0KBNNCRLP0SO3CYZMOGFQATYTPG2Y").decode("ascii")
     headers = {
         'Authorization': 'Basic %s' % userAndPass,
         'Content-Type': 'application/json'
-    }
-    
-    ###TaskID will go HERE!
-    conn.request("PATCH", "/v2/tasks/"+ str(taskID), payload, headers)
-    res = conn.getresponse()
-    data = res.read()
-    print(data.decode("utf-8"))
+        }
 
-    print("THIS IS THE END OF THIS THING")
+    for i, taskID in enumerate(taskArr):
+        #print("priority - " + str(finPrioArr[i]))
+        #print("iD - " + str(taskID))
+        PRIid = finPrioArr[i]
+
+        payload = json.dumps({
+            "priority": PRIid
+        })
+
+        conn.request("PATCH", "/v2/tasks/"+ str(taskID), payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        #print(data.decode("utf-8"))
+
+    #END FOR-taskID
 
     return(print("GOODBYE"))
 
@@ -305,7 +306,7 @@ def buildArrayofTasks(limited):
 
     FCA2Priorites(taskArr, fcArr)
 
-    return(print("done"))
+    return(print("COMPLETE"))
 
 
 

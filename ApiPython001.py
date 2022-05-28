@@ -11,7 +11,7 @@ import numpy as np
 
 def update_FC(coolshit): #THIS SHOULD BE THE LAST STEP - sending the API/Update with new Priority Levels
     print(coolshit)
-    PRIid = 1
+    PRIid = 4
     taskID = 59
 
 
@@ -19,8 +19,7 @@ def update_FC(coolshit): #THIS SHOULD BE THE LAST STEP - sending the API/Update 
     payload = json.dumps({
         "priority": PRIid
     })
-    userAndPass = b64encode(
-        b"DCHBKYZF5NMXHCV8AG4M1J53DFDONO8Z:WV0KBNNCRLP0SO3CYZMOGFQATYTPG2Y").decode("ascii")
+    userAndPass = b64encode(b"DCHBKYZF5NMXHCV8AG4M1J53DFDONO8Z:WV0KBNNCRLP0SO3CYZMOGFQATYTPG2Y").decode("ascii")
 
     headers = {
         'Authorization': 'Basic %s' % userAndPass,
