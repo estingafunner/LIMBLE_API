@@ -15,6 +15,7 @@ def FCA2Priorites(taskArr, fcArr):
                         #THEN the 5 priority levels will be divided into...
                         #rtnartnsxfgnxertnsfxgntxfgns
     prioArr = []
+    pcSync = []
     nzFcArr = []
     finPrioArr = []
     nzFcArri = np.array(nzFcArr)
@@ -26,15 +27,15 @@ def FCA2Priorites(taskArr, fcArr):
         if n != 0:  # START IF--1
             nzFcArr.append(n)
             #END IF--1
-        #END for-m-n
+        #END for-n
 
-    nzFcArri = np.unique(np.sort(nzFcArr)) #every task's Filter Code, in ascending order
+    nzFcArri = np.unique(np.sort(fcArr)) #every task's Filter Code, in ascending order
     print(nzFcArri)
 
     nzL = len(fcArr)    #####  len(nzFcArri)  THIS WILL NOT continue to work. There will eventually be 
                         #####hundreds of tasks(=> filter codes). Dividing them into 5 equal Priority categories will not be effective
                         #####nzFcArri is an ascending list of Filter Codes. Take the top 50 or top 10% and divide those into 5 Priorities
-
+    """ 
     if (0 in fcArri) == False:### if len(fcArri) == nzL:  # START IF--2  #No Zeros; 5 Priority Levels
         #print("No Zeros")
         nzChops = nzL // ratioVariable
@@ -114,14 +115,18 @@ def FCA2Priorites(taskArr, fcArr):
         #else, forloop nzFcArri looking to match value of fcArr(w)
         #if matched, get the position of nzFcArri, apply same position to prioArri, finPrioArr.append(prioArr(whatev position))
 
-        #END IF--2
+        #END IF--2 """
+    
+    if len(nzFcArri) < 20:
+        i = 1
+        while i < 6
+            pcSync.append(i)
+            i += 1
+        #END FOR-i, j
+    else:
 
+    #END IF len(nz...)
 
-    """     print(fcArri)
-    print(nzFcArri)
-    print(prioArr)
-    print(fcArri)
-    print(finPrioArr) """
 
     fourKey = np.stack((fcArr, finPrioArr, taskArr), axis=1)  # DONT NEED?
     #print(fourKey)
