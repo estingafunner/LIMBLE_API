@@ -116,17 +116,41 @@ def FCA2Priorites(taskArr, fcArr):
         #if matched, get the position of nzFcArri, apply same position to prioArri, finPrioArr.append(prioArr(whatev position))
 
         #END IF--2 """
-    
+        ###THIS is trash
+    """ #THIS needs to work for a task list that can be up to 1000 tasks long.
+    # filter codes can range rom 0-125
+    #
+
     if len(nzFcArri) < 20:
-        i = 1
-        while i < 6
-            pcSync.append(i)
-            i += 1
-        #END FOR-i, j
+        x = 6
     else:
-
+        x = len(nzFcArri) // 10
     #END IF len(nz...)
+    i = 1
+    while i < x:
+        
+    #END FOR-i, j """
+    #end trash
 
+    ones = 0
+    twos = 15
+    threes = 30
+    fours = 50
+
+    for i in fcArr:
+        fcChecking = i
+        if fcChecking == 0:
+            finPrioArr.append("1")
+        elif fcChecking < twos:
+            finPrioArr.append("2")
+        elif fcChecking < threes:
+            finPrioArr.append("3")    
+        elif fcChecking < fours:
+            finPrioArr.append("4")
+        else:
+            finPrioArr.append("5")
+        #END if-fcChecking
+    #END for-i        
 
     fourKey = np.stack((fcArr, finPrioArr, taskArr), axis=1)  # DONT NEED?
     #print(fourKey)
