@@ -116,21 +116,7 @@ def FCA2Priorites(taskArr, fcArr):
         #if matched, get the position of nzFcArri, apply same position to prioArri, finPrioArr.append(prioArr(whatev position))
 
         #END IF--2 """
-        ###THIS is trash
-    """ #THIS needs to work for a task list that can be up to 1000 tasks long.
-    # filter codes can range rom 0-125
-    #
 
-    if len(nzFcArri) < 20:
-        x = 6
-    else:
-        x = len(nzFcArri) // 10
-    #END IF len(nz...)
-    i = 1
-    while i < x:
-        
-    #END FOR-i, j """
-    #end trash
 
     ones = 0
     twos = 15
@@ -139,7 +125,7 @@ def FCA2Priorites(taskArr, fcArr):
 
     for i in fcArr:
         fcChecking = i
-        if fcChecking == 0:
+        if fcChecking == ones:
             finPrioArr.append("1")
         elif fcChecking < twos:
             finPrioArr.append("2")
