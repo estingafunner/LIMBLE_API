@@ -22,18 +22,19 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
                 print(cell.value)
                 if cell.value == "FREQ":
                     initialCell = index
-                    print("index - ")
+                    print("1 - initialCell - " % initialCell)
 
                 elif cell.value == "None" and initialCell == 0:
                     initialCell = index
-                    print("None - ")
+                    print("1 - initialCell - " % initialCell)
 
                 elif cell.value == "None" and initialCell != 0:
+                    print("1 - initialCell - " % initialCell)
                     finCell = index
 
                     #Loop from initialCell to finCell over column B and D
                     #build array as [equipment..., task, freq]
-                    
+
                     #ALL NEEDS TO END WHEN ARRAY has 100 entries (due to the import limitation of LIMBLE)
 
                     #THIS NEEDS TO END with  initialCell = 0 and finCell = 0
