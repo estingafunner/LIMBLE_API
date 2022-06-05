@@ -26,11 +26,13 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
 
                 elif cell.value == "None" and initialCell == 0:
                     initialCell = index
-                    print("1 - initialCell - " % initialCell)
+                    print("2 - initialCell - " % initialCell)
 
                 elif cell.value == "None" and initialCell != 0:
-                    print("1 - initialCell - " % initialCell)
+                    
                     finCell = index
+                    print("3 - initialCell - " % initialCell)
+                    print("4 - finCell - " % initialCell)
 
                     #Loop from initialCell to finCell over column B and D
                     #build array as [equipment..., task, freq]
