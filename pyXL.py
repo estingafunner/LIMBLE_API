@@ -16,23 +16,23 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
             print(ws.title)
             initialCell = 0
             finCell = 0
-
+###PROBABLY change this to a loop through Range(3(wherever FREQ is) to len(ws['c'])
             for index, cell in enumerate(ws['C']):
                 
                 print(cell.value)
                 if cell.value == "FREQ":
                     initialCell = index
-                    print("1 - initialCell - " % initialCell)
+                    print("1 - initialCell - " )
 
                 elif cell.value == "None" and initialCell == 0:
                     initialCell = index
-                    print("2 - initialCell - " % initialCell)
+                    print("2 - initialCell - ")
 
                 elif cell.value == "None" and initialCell != 0:
                     
                     finCell = index
-                    print("3 - initialCell - " % initialCell)
-                    print("4 - finCell - " % initialCell)
+                    print("3 - initialCell - " )
+                    print("4 - finCell - " )
 
                     #Loop from initialCell to finCell over column B and D
                     #build array as [equipment..., task, freq]
@@ -50,9 +50,12 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
         #END if-"BOOK"-ws.title    
 
     #END for-ws-wb.worksheets
+    pmbArr = -9
     buildImportSheet(pmbArr)
     #END fromPMBooks()
 
 def buildImportSheet(pmbArr):
     print("nothing")
     #END buildImportSheets()
+
+fromPMBooks()
