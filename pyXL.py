@@ -1,6 +1,8 @@
 #pip install pillow
 #pip install openpyxl
 
+import numpy as np
+import re
 from openpyxl import load_workbook
 
 def fromPMBooks(): #This will strip the PM Books for equipment name/number, task info, and frequence
@@ -13,18 +15,20 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
 
     exCounter = 0   #DITCH this, add a statement to first IF... AND len(eqArr) < 100 
                     #The point of this is to meet limble's PM import maximum of 100 tasks
+                    #THERE IS no need to limit the number of tasks in this function!
+                    #instead, another function will split the array of all tasks into 100-task chunks and export to limble that way
 
     for ws in wb.worksheets:
 
         if "BOOK" in ws.title or "Support 1" in ws.title or "Support 2" in ws.title:
 
-            print(ws.title)
+            #print(ws.title)
             initialCell = 0
             finCell = 0
-###PROBABLY change this to a loop through Range(3(wherever FREQ is) to len(ws['c'])
+            ###PROBABLY change this to a loop through Range(3(wherever FREQ is) to len(ws['c'])
             for index, cell in enumerate(ws['C']):
                 
-                print(cell.value)
+                #print(cell.value)
                 if cell.value is None and initialCell == 0:
                     initialCell = index 
                     
@@ -32,15 +36,27 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
                 elif cell.value is None and initialCell != 0:
                     initialCell = initialCell + 1
                     finCell = index
-                    print(finCell)
+                    #print(finCell)
 
                     eqFind = "B" + str(initialCell)
                     eqRaw = ws[eqFind].value
-                    print(eqRaw)
+                    #print(eqRaw)
 
+                    for i in range((initialCell + 1) , (finCell + 1)):
+                        taski = "B" + str(i)
+                        freqi = "C" + str(i)
+                        eqArr.append(eqRaw)
+                        taskArr.append(ws[taski].value)
+                        freqArr.append(ws[freqi].value)
+                    #END FOR-i range
+
+                    #print(eqArr)
+                    #print(taskArr)
                     
+
                     #initialCell - 1 of B is Equipment RAW, ad
                     #from initialCell to finCell, add to array Bi, Ci, and EqRaw(for every i)
+
                     initialCell = finCell 
 
                     #Loop from initialCell to finCell over column B and D
@@ -51,7 +67,7 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
                     #THIS NEEDS TO END with  initialCell = 0 and finCell = 0
                     """ cell.value == "FREQ":
                     initialCell = index
-                    print("1 - initialCell - " ) """
+                    print("1 - initialCell - " ) """ # this was made obsolete by checking if initialCell == 0
 
 
 
@@ -62,12 +78,39 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
         #END if-"BOOK"-ws.title    
 
     #END for-ws-wb.worksheets
-    pmbArr = -9
-    buildImportSheet(pmbArr)
+    ##print(len(list(set(eqArr))))
+    #print(list(set(eqArr)))
+    ##print(len(list(set(taskArr))))
+    #print(list(set(taskArr)))
+    ##print(len(np.unique(np.sort(freqArr))))
+    ##print(np.unique(np.sort(freqArr)))
+    
+    pmbArr = np.stack((eqArr, taskArr, freqArr), axis=1)
+    buildImportSheet(eqArr, taskArr, freqArr)
     #END fromPMBooks()
 
-def buildImportSheet(pmbArr):
-    print("nothing")
+def buildImportSheet(eqArr, taskArr, freqArr):
+
+    for x, thing in enumerate(eqArr):
+        #print(thing)
+        if thing is not None:
+            clean1 = thing.find('#') + 1
+            #print(clean1)
+            clean2 = thing[clean1:(len(thing))]
+            #print(clean2)
+            clean3 = re.sub(r"\s{2,}"," ",clean2) #clean2.strip()
+            clean4 = clean3.strip()
+            #print(clean4)
+            #print(" - ")
+            eqNum = clean4[:3]
+            #print(eqNum)
+            PMName = str(eqNum) + "." + str(freqArr[x]) + "-" + str(taskArr[x])[:7] + "..." #   "PM." + 
+            print(PMName)
+            PMDesc = 2
+        #END IF-THING is NOT NONE
+    #END FOR-THING
+
+    #print(pmbArr)
     #END buildImportSheets()
 
 fromPMBooks()
