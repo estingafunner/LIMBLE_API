@@ -1,17 +1,25 @@
 #pip install pillow
 #pip install openpyxl
 
+# - THIS IS WHAT IS NEXT - ##############
+""" 
+6.12 I need to make another function (or set of functions) to build the ASSET import sheet for Limble
+I don't think there is a sheet that has ALL of the equipment WITH RISK AND SEVERITY.
+Should I wait for the equipement before filling the PM import sheet? Is there any adventatge?
+ """
+#########################################
+
 import numpy as np
 import re
 from openpyxl import load_workbook
 
 def fromPMBooks(): #This will strip the PM Books for equipment name/number, task info, and frequence
     wb = load_workbook(filename="PM Books.xlsm")
-    ws = wb.active
+    #ws = wb.active #I don't think I need this. NOPE! DIDN'T NEED IT!
 
     eqArr = []
     taskArr = []
-    freqArr = [] #THESE THREE ARRAYS will eventually be stacked into a single array like this: fourKey = np.stack((fcArr, finPrioArr, taskArr), axis=1)
+    freqArr = [] #THESE THREE ARRAYS will eventually be stacked into a single array like this: fourKey = np.stack((fcArr, finPrioArr, taskArr), axis=1) TURNS OUT I DON'T NEED TO STACK THE ARRAYS AFTERALL.
 
     exCounter = 0   #DITCH this, add a statement to first IF... AND len(eqArr) < 100 
                     #The point of this is to meet limble's PM import maximum of 100 tasks
@@ -78,22 +86,31 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
         #END if-"BOOK"-ws.title    
 
     #END for-ws-wb.worksheets
+    
     ##print(len(list(set(eqArr))))
     #print(list(set(eqArr)))
     ##print(len(list(set(taskArr))))
     #print(list(set(taskArr)))
     ##print(len(np.unique(np.sort(freqArr))))
     ##print(np.unique(np.sort(freqArr)))
+    #print(eqArr)
     
-    pmbArr = np.stack((eqArr, taskArr, freqArr), axis=1)
+    pmbArr = np.stack((eqArr, taskArr, freqArr), axis=1) #Decided to skip this and send all 
+                    #three arrays to 'buildimportsheet()' individually. Simpler. More Simpler.
     buildImportSheet(eqArr, taskArr, freqArr)
+
     #END fromPMBooks()
 
 def buildImportSheet(eqArr, taskArr, freqArr):
+    wb = load_workbook(filename="PM Import.xlsm")
+    ws = wb.active
 
     for x, thing in enumerate(eqArr):
         #print(thing)
         if thing is not None:
+            PMTask = taskArr[x]
+            PMFreq = freqArr[x]
+            
             clean1 = thing.find('#') + 1
             #print(clean1)
             clean2 = thing[clean1:(len(thing))]
@@ -104,13 +121,23 @@ def buildImportSheet(eqArr, taskArr, freqArr):
             #print(" - ")
             eqNum = clean4[:3]
             #print(eqNum)
-            PMName = str(eqNum) + "." + str(freqArr[x]) + "-" + str(taskArr[x])[:7] + "..." #   "PM." + 
+            PMName = str(eqNum) + "." + str(PMFreq) + "-" + str(PMTask)[:7] + "..." #   "PM." + 
+            
             print(PMName)
-            PMDesc = 2
+            print(PMTask)
+            print(PMFreq)
+            print(" - ")
+
+            #!!!!!!! This is where code goes to move the three above-printed variables into "PM Import.xlsm"
+            lastRow = len(ws['A'])
+            ws.cell(row = lastRow, column = 1).value = PMName
+            wb.save("PM Import.xlsm")
         #END IF-THING is NOT NONE
+
     #END FOR-THING
 
     #print(pmbArr)
+
     #END buildImportSheets()
 
 fromPMBooks()
