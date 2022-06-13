@@ -14,7 +14,7 @@ import numpy as np
 import re
 from openpyxl import load_workbook
 
-def fromPMBooks(): #This will strip the PM Books for equipment name/number, task info, and frequence
+def fromPMBooks(): #WORKS!6.13 - This will strip the PM Books for equipment name/number, task info, and frequence
     wb = load_workbook(filename="PM Books.xlsm")
     #ws = wb.active #I don't think I need this. NOPE! DIDN'T NEED IT!
 
@@ -102,7 +102,7 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
 
     #END fromPMBooks()
 
-def buildImportSheet(eqArr, taskArr, freqArr):
+def buildImportSheet(eqArr, taskArr, freqArr): #WORKS! 6.13 - Takes Equipment info, frequency, and task descriptions and funnels them into excel for import into LIMBLE/CMMS
     wb = load_workbook(filename="sample_PM_Templates_list.xlsx")
     ws = wb.active
 
