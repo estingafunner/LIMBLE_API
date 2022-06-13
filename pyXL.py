@@ -6,6 +6,7 @@
 6.12 I need to make another function (or set of functions) to build the ASSET import sheet for Limble
 I don't think there is a sheet that has ALL of the equipment WITH RISK AND SEVERITY.
 Should I wait for the equipement before filling the PM import sheet? Is there any adventatge?
+6.13 
  """
 #########################################
 
@@ -102,7 +103,7 @@ def fromPMBooks(): #This will strip the PM Books for equipment name/number, task
     #END fromPMBooks()
 
 def buildImportSheet(eqArr, taskArr, freqArr):
-    wb = load_workbook(filename="PM Import.xlsm")
+    wb = load_workbook(filename="sample_PM_Templates_list.xlsx")
     ws = wb.active
 
     for x, thing in enumerate(eqArr):
@@ -130,13 +131,14 @@ def buildImportSheet(eqArr, taskArr, freqArr):
 
             #!!!!!!! This is where code goes to move the three above-printed variables into "PM Import.xlsm"
             lastRow = len(ws['A']) + 1
-            ws.cell(row = lastRow, column = 1).value = PMName
-            wb.save("PM Import3.xlsm")
-            print("I Need this break to prevent Filetype issues for the PM Import.xlsm file.")
+            ws.cell(row = lastRow, column = 1).value = PMName #Column A
+            ws.cell(row = lastRow, column = 3).value = PMTask #Column C
+            ws.cell(row = lastRow, column = 15).value = PMFreq #Column O
         #END IF-THING is NOT NONE
 
     #END FOR-THING
-
+    wb.save("PM Import4.xlsx")
+    print("I Need this break to prevent Filetype issues for the PM Import.xlsm file.")
     #print(pmbArr)
 
     #END buildImportSheets()
