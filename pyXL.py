@@ -17,6 +17,7 @@ from openpyxl import load_workbook
 def fromPMBooks(): #WORKS!6.13 - This will strip the PM Books for equipment name/number, task info, and frequence
     wb = load_workbook(filename="PM Books.xlsm")
     #ws = wb.active #I don't think I need this. NOPE! DIDN'T NEED IT!
+    
 
     eqArr = []
     taskArr = []
@@ -104,7 +105,9 @@ def fromPMBooks(): #WORKS!6.13 - This will strip the PM Books for equipment name
 
 def buildImportSheet(eqArr, taskArr, freqArr): #WORKS! 6.13 - Takes Equipment info, frequency, and task descriptions and funnels them into excel for import into LIMBLE/CMMS
     wb = load_workbook(filename="sample_PM_Templates_list.xlsx")
+    wbb = load_workbook(filename="Assets-Export-Limble.xlsx")
     ws = wb.active
+    wss = wbb.active
 
     for x, thing in enumerate(eqArr):
         #print(thing)
@@ -121,24 +124,45 @@ def buildImportSheet(eqArr, taskArr, freqArr): #WORKS! 6.13 - Takes Equipment in
             #print(clean4)
             #print(" - ")
             eqNum = clean4[:3]
-            #print(eqNum)
+            print(eqNum)
+            
+            ########## i think this is where I need to be making a for-loopInt
+            # search eqNum against  Asset-Export-Limble.xlsx, column B.value[:3]
+            # if a match is found, pull value of "A"+ loopInt
+            PMassetID = 0
+            for loopInt in eqNum:
+                #####################THIS NEEDS TO BE IN ANOTHER LOOP THAT GOES DOWN COL B OF WBB/SS
+                v = 2 + 0
+                eqNom = wss[("B" + str(v))].value[:3]
+                if loopInt == eqNom:
+                    PMassetID = wss[("A" + str(v))].value  
+                    print(PMassetID)
+                    print(eqNom)
+                    print(loopInt)
+                    print(" - ")          
+                #END IF-LOOPINT    
+            #END FOR-LOOPINT
+
+
+
             PMName = str(eqNum) + "." + str(PMFreq) + "-" + str(PMTask)[:7] + "..." #   "PM." + 
             
-            print(PMName)
-            print(PMTask)
-            print(PMFreq)
-            print(" - ")
+            #print(PMName)
+            #print(PMTask)
+            #print(PMFreq)
+            #print(" - ")
 
             #!!!!!!! This is where code goes to move the three above-printed variables into "PM Import.xlsm"
             lastRow = len(ws['A']) + 1
             ws.cell(row = lastRow, column = 1).value = PMName #Column A
             ws.cell(row = lastRow, column = 3).value = PMTask #Column C
+            ws.cell(row = lastRow, column = 13).value = PMassetID #Column M
             ws.cell(row = lastRow, column = 15).value = PMFreq #Column O
         #END IF-THING is NOT NONE
 
     #END FOR-THING
-    wb.save("PM Import4.xlsx")
-    print("I Need this break to prevent Filetype issues for the PM Import.xlsm file.")
+    wb.save("PMImport4Limble.xlsx")
+    #print("I Need this break to prevent Filetype issues for the PM Import.xlsm file.")
     #print(pmbArr)
 
     #END buildImportSheets()
