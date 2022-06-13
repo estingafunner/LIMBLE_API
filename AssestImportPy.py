@@ -4,18 +4,18 @@
  """
 #########################################
 
+from operator import mod
 from tkinter.font import names
 import numpy as np
 import re
 from openpyxl import load_workbook
 
-def eqNameBuild(): #pull info from assetsRaw to build array of equipNum - AssetName, Format Example: "964 - North Elevator"
-    #
+def eqNameBuild(): #WORKS! 6.13 - pull info from assetsRaw to build array of equipNum - AssetName, Format Example: "964 - North Elevator"
     namesArr = []
     makeArr = []
     modelArr = []
     serialArr = []
-    shortParentArr = []
+    shortParentArr = [] #didnt use
     parentArr = []
 
     wb = load_workbook(filename="assetsRaw.xlsx")
@@ -28,7 +28,7 @@ def eqNameBuild(): #pull info from assetsRaw to build array of equipNum - AssetN
             #print(eqName)
             #print(ws[eqName].value)
             longACode = "B" + str(z)
-            longPCode = "H" + str(z)
+            longPCode = "H" + str(z) #didnt need
 
             x = ws[longACode].value.rsplit("-")
             #print(x)
@@ -61,18 +61,36 @@ def eqNameBuild(): #pull info from assetsRaw to build array of equipNum - AssetN
         #END IF CELL.VALUE
     #END FOR-Z
 
-    for j, eqNom in enumerate(namesArr): #get fpn (full parent name) from parent by matching to namesArr[:3]
-        print(eqNom)
+    for eqNom in namesArr: #get fpn (full parent name) from parent by matching to namesArr[:3]
+        #print(eqNom)
         for k, parr in enumerate(parentArr):
             if eqNom[:(len(parr))] == parr:
                 parentArr[k] = (eqNom)
-                print(eqNom)
+                #print(eqNom)
             #END IF-EQNOM
         #END FOR-K
     #END FOR-J
 
-    print(parentArr)
+    #print(parentArr)
     #print(len(namesArr))
+    importBuild(namesArr, parentArr, makeArr, modelArr, serialArr)
 #END eqNameBuild()
+
+def importBuild(namesArr, parentArr, makeArr, modelArr, serialArr):
+    wb = load_workbook(filename="Sample Asset Import.xlsx")
+    ws = wb.active
+
+    for i, nom in enumerate(namesArr):
+        x = 2 + i
+
+        ws[("A" + (str(x)))].value = namesArr[i]
+        ws[("B" + (str(x)))].value = parentArr[i]
+        ws[("C" + (str(x)))].value = makeArr[i]
+        ws[("D" + (str(x)))].value = modelArr[i]
+        ws[("E" + (str(x)))].value = serialArr[i]
+        print(" - ")
+    #END FOR-I NOM   
+    wb.save("Asset Import Pyd.xlsx")
+#END importBuild()
 
 eqNameBuild()
