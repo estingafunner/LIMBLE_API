@@ -6,7 +6,8 @@
 6.12 I need to make another function (or set of functions) to build the ASSET import sheet for Limble
 I don't think there is a sheet that has ALL of the equipment WITH RISK AND SEVERITY.
 Should I wait for the equipement before filling the PM import sheet? Is there any adventatge?
-6.13 
+6.13 Keep working on matching pmNum to assetID
+6.14 Complete!
  """
 #########################################
 
@@ -124,26 +125,23 @@ def buildImportSheet(eqArr, taskArr, freqArr): #WORKS! 6.13 - Takes Equipment in
             #print(clean4)
             #print(" - ")
             eqNum = clean4[:3]
-            print(eqNum)
-            
-            ########## i think this is where I need to be making a for-loopInt
-            # search eqNum against  Asset-Export-Limble.xlsx, column B.value[:3]
-            # if a match is found, pull value of "A"+ loopInt
             PMassetID = 0
-            for loopInt in eqNum:
-                #####################THIS NEEDS TO BE IN ANOTHER LOOP THAT GOES DOWN COL B OF WBB/SS
-                v = 2 + 0
-                eqNom = wss[("B" + str(v))].value[:3]
-                if loopInt == eqNom:
-                    PMassetID = wss[("A" + str(v))].value  
-                    print(PMassetID)
+           
+            for v in range(2, len(wss["B"])):
+
+                eqNom = wss[("B" + str(v))].value
+                eqNom = eqNom[:3]
+
+                if eqNum == eqNom:
+                    assetID = wss[("A" + str(v))].value  
+                    print(assetID)
                     print(eqNom)
-                    print(loopInt)
-                    print(" - ")          
-                #END IF-LOOPINT    
-            #END FOR-LOOPINT
+                    print(eqNum)
+                    print(" - ")
+                    PMassetID = assetID
 
-
+                #END IF-LOOPINT 
+            #END FOR-V
 
             PMName = str(eqNum) + "." + str(PMFreq) + "-" + str(PMTask)[:7] + "..." #   "PM." + 
             
