@@ -225,7 +225,7 @@ def find_severity(etID):
     #goJuice = "/v2/assets/fields/?assets=" + str(etID) + "&fields=7&limit=10"
 
     conn.request(
-        "GET", "/v2/assets/fields/?assets=" + str(etID) + "&fields=7&limit=10", payload, headers)
+        "GET", "/v2/assets/fields/?assets=" + str(etID) + "&fields=7", payload, headers)
 
     res = conn.getresponse()
     data = res.read()
